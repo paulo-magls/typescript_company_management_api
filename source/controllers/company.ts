@@ -48,7 +48,7 @@ const createCompany = async (req: Request, res: Response, next: NextFunction) =>
 const getAllCompanies = async (req: Request, res: Response, next: NextFunction) => {
     logging.info(NAMESPACE, 'Recuperando todas as empresas.');
 
-    let query = 'SELECT nome_cliente, senha, nome_empresa, cnpj, cep, endereco, numero, telefone, email FROM empresas';
+    let query = 'SELECT nome_cliente, nome_empresa, cnpj, cep, endereco, numero, telefone, email FROM empresas';
 
     Connect()
         .then((connection) => {
@@ -88,16 +88,16 @@ const getCompanyByCNPJ = async (req: Request, res: Response, next: NextFunction)
 
     let { cnpj } = req.params;
 
-    let query = `SELECT nome_cliente, senha, nome_empresa, cnpj, cep, endereco, numero, telefone, email FROM empresas WHERE cnpj = "${cnpj}"`;
+    let query = `SELECT nome_cliente, nome_empresa, cnpj, cep, endereco, numero, telefone, email FROM empresas WHERE cnpj = "${cnpj}"`;
 
     Connect()
         .then((connection) => {
             Query(connection, query)
-                .then((results) => {
-                    logging.info(NAMESPACE, 'Empresa recuperada: ', results);
+                .then((result) => {
+                    logging.info(NAMESPACE, 'Empresa recuperada: ', result);
 
                     return res.status(200).json({
-                        results
+                        result: result
                     });
                 })
                 .catch((error) => {
@@ -126,11 +126,12 @@ const getCompanyByCNPJ = async (req: Request, res: Response, next: NextFunction)
 const updateCompany = async (req: Request, res: Response, next: NextFunction) => {
     logging.info(NAMESPACE, 'Atualizando empresa');
 
-    let { cnpj } = req.params;
+    let cnpj: number = Number(req.params.cnpj);
+    let { nome_cliente, nome_empresa, cep, endereco, numero, telefone, email } = req.body;
 
-    let empresa: Icompany = req.body;
+    let empresa: Icompany = { nome_cliente, nome_empresa, cnpj, cep, endereco, numero, telefone, email };
 
-    let query = `UPDATE empresas SET nome_cliente = "${empresa.nome_cliente}", senha = "${empresa.senha}", nome_empresa = "${empresa.nome_empresa}", cep = "${empresa.cep}", endereco = "${empresa.endereco}", numero = "${empresa.numero}", telefone = "${empresa.telefone}", email = "${empresa.email}" WHERE cnpj = "${cnpj}"`;
+    let query = `UPDATE empresas SET nome_cliente = "${empresa.nome_cliente}", nome_empresa = "${empresa.nome_empresa}", cep = "${empresa.cep}", endereco = "${empresa.endereco}", numero = "${empresa.numero}", telefone = "${empresa.telefone}", email = "${empresa.email}" WHERE cnpj = "${empresa.cnpj}"`;
 
     Connect()
         .then((connection) => {
@@ -175,11 +176,11 @@ const deleteCompany = async (req: Request, res: Response, next: NextFunction) =>
     Connect()
         .then((connection) => {
             Query(connection, query)
-                .then((results) => {
-                    logging.info(NAMESPACE, 'Empresa deletada: ', results);
+                .then((result) => {
+                    logging.info(NAMESPACE, 'Empresa deletada: ', result);
 
                     return res.status(200).json({
-                        results
+                        result
                     });
                 })
                 .catch((error) => {

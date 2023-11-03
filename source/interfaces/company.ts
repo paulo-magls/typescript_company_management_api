@@ -1,8 +1,8 @@
 export default interface Icompany {
     nome_cliente: string;
-    senha: string;
+    senha?: string;
     nome_empresa: string;
-    cnpj?: number;
+    cnpj: number;
     cep: number;
     endereco: string;
     numero: number;
