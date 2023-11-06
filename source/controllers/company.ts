@@ -131,7 +131,7 @@ const updateCompany = async (req: Request, res: Response, next: NextFunction) =>
 
     let empresa: Icompany = { nome_cliente, nome_empresa, cnpj, cep, endereco, numero, telefone, email };
 
-    let query = `UPDATE empresas SET nome_cliente = "${empresa.nome_cliente}", nome_empresa = "${empresa.nome_empresa}", cep = "${empresa.cep}", endereco = "${empresa.endereco}", numero = "${empresa.numero}", telefone = "${empresa.telefone}", email = "${empresa.email}" WHERE cnpj = "${empresa.cnpj}"`;
+    let query = `UPDATE empresas SET nome_cliente = "${empresa.nome_cliente}", nome_empresa = "${empresa.nome_empresa}", cnpj = "${empresa.cnpj}", cep = "${empresa.cep}", endereco = "${empresa.endereco}", numero = "${empresa.numero}", telefone = "${empresa.telefone}", email = "${empresa.email}" WHERE cnpj = "${empresa.cnpj}"`;
 
     Connect()
         .then((connection) => {
